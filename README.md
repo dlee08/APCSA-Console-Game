@@ -1,2 +1,2 @@
 # APCSA-Console-Game
-David Lee and Jessie Lam
+David Lee and Jesse Lam
