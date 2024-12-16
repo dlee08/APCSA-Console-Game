@@ -28,6 +28,7 @@ public class Game {
 
       for (int turn = 0; turn < roundOrder.size(); turn++) {
         Adventurer activeCharacter = roundOrder.get(turn);
+        p("It is " + activeCharacter + "'s turn!");
 
         if (activeCharacter.isPlayer())
           playerChoice(activeCharacter, input);
