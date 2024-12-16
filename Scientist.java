@@ -4,14 +4,24 @@ public class Scientist extends Adventurer {
   }
 
   public String attack(Adventurer other) {
-    return "";
-  }
-
-  public String specialAttack(Adventurer other) {
-    return "";
+    int totalDamage = generateDamage();
+    String message = this + " fires a freeze ray towards " + other + "! ";
+    return message + "\n" + damage(other, totalDamage);
   }
 
   public String support(Adventurer other) {
-    return "";
+    int totalHealing = generateSupport();
+    String message = this + " cryo-freezes " + other + " to heal them! ";
+    return message + "\n" + heal(other, totalHealing);
+  }
+
+  public String specialAttack(Adventurer other) {
+    if (getSpecial() - 50 < 0) {
+      throw new IllegalArgumentException("Not enough " + getSpecialName() + " to use special.");
+    }
+    setSpecial(getSpecial() - 50);
+    int totalDamage = generateDamage() * 2;
+    String message = this + " charges up their deathray to aim at " + other + "! ";
+    return message + "\n" + damage(other, totalDamage) + "\n" + reportSpecial();
   }
 }
