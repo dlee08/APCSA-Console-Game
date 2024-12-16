@@ -17,7 +17,6 @@ public abstract class Adventurer extends Active{
     this.maxSpecial = special;
     this.potency = potency;
 
-    livingList().add(this);
     if (isPlayer)
       playerList().add(this);
     else
