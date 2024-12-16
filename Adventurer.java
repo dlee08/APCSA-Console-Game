@@ -1,95 +1,155 @@
-// Collaborators:
-
-import java.util.Random;
-
-public abstract class Adventurer{
+// Collaborators: Jesse Lam, David Lee
+public abstract class Adventurer extends Active{
   private String name, specialName;
-  private int HP, maxHP, special, maxSpecial, atk;
+  private int health, maxHealth, special, maxSpecial, potency;
 
-  public Adventurer(String name, String specialName){
-    this(name, specialName, 100, 100, 10);
+  public Adventurer(String name, String specialName, boolean isPlayer) {
+    this(name, specialName, 200, 200, 30, isPlayer);
   }
 
-  public Adventurer(String name, String specialName, int hp, int special, int atk) {
+  public Adventurer(String name, String specialName, int hp, int special, int potency, boolean isPlayer) {
+    super(isPlayer);
     this.name = name;
     this.specialName = specialName;
-    this.HP = hp;
-    this.maxHP = hp;
+    this.health = hp;
+    this.maxHealth = hp;
     this.special = special;
     this.maxSpecial = special;
-    this.atk = atk;
+    this.potency = potency;
+
+    livingList().add(this);
+    if (isPlayer)
+      playerList().add(this);
+    else
+      enemyList().add(this);
   }
 
-  public String toString(){
-    return this.getName();
+  // Offense
+  public abstract String attack(Adventurer other);
+
+  public abstract String specialAttack(Adventurer other);
+
+  public String damage(Adventurer other, int damage) {
+    other.applyDamage(damage);
+    String message = this + " has dealt " + damage + " damage to " + other + "! ";
+    return message + "\n" + other.reportHealth();
   }
 
-  public int restoreHP(int n){
-    if (n > getMaxHP() - getHP()){
-      n = getMaxHP() - getHP();
+  public void applyDamage(int amount) {
+    this.health -= amount;
+    if (this.health <= 0)
+      eliminate();
+  }
+
+  public int generateDamage() {
+    return (int) (Math.random() * potency) + potency / 2;
+  }
+
+  // Support
+  public abstract String support(Adventurer other);
+
+  public String heal(Adventurer other, int healing) {
+    healing = other.restoreHP(healing);
+    String message = this + " has restored " + healing + " health to " + other + "! ";
+    return message + "\n" + other.reportHealth();
+  }
+
+  public String energize(Adventurer other, int energy) {
+    energy = other.restoreSpecial(energy);
+    String message = this + " has restored " + energy + " " + specialName + " to " + other + "! ";
+    return message + "\n" + other.reportHealth();
+  }
+
+  public int restoreHP(int n) {
+    if (n > getMaxHealth() - getHealth()) {
+      n = getMaxHealth() - getHealth();
     }
-    setHP(getHP()+n);
+    setHealth(getHealth() + n);
     return n;
   }
 
-  public int restoreSpecial(int n){
-    if (n > getMaxSpecial() - getSpecial()){
+  public int restoreSpecial(int n) {
+    if (n > getMaxSpecial() - getSpecial()) {
       n = getMaxSpecial() - getSpecial();
     }
-    setSpecial(getSpecial()+n);
+    setSpecial(getSpecial() + n);
     return n;
   }
 
-  public String getName(){
+  public int generateSupport() {
+    return (int) (Math.random() * potency) + potency / 2;
+  }
+
+  // Misc.
+  public String reportHealth() {
+    return this + "'s HP is " + health + "/" + maxHealth + ".";
+  }
+  
+  public String reportSpecial() {
+    return this + "'s " + specialName + " is " + special + "/" + maxSpecial + ". ";
+  }
+
+  public String toString() {
+    if (isPlayer())
+      return "\u001b[32m" + getClass().getSimpleName() + " " + this.getName() + "\u001B[0m";
+    else
+      return "\u001b[31m" + getClass().getSimpleName() + " " + this.getName() + "\u001B[0m";
+  }
+
+  // Setters and Getters
+  public String getName() {
     return name;
   }
 
-  public int getHP(){
-    return HP;
-  }
-
-  public int getMaxHP(){
-    return maxHP;
-  }
-
-  public void setmaxHP(int newMax){
-    maxHP = newMax;
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getSpecialName() {
     return specialName;
   }
 
+  public void setSpecialName(String specialName) {
+    this.specialName = specialName;
+  }
+
+  public int getHealth() {
+    return health;
+  }
+
+  public void setHealth(int health) {
+    this.health = health;
+  }
+
+  public int getMaxHealth() {
+    return maxHealth;
+  }
+
+  public void setMaxHealth(int maxHealth) {
+    this.maxHealth = maxHealth;
+  }
+
   public int getSpecial() {
     return special;
   }
+
+  public void setSpecial(int special) {
+    this.special = special;
+  }
+
   public int getMaxSpecial() {
     return maxSpecial;
   }
 
-  public void setHP(int health){
-    this.HP = health;
+  public void setMaxSpecial(int maxSpecial) {
+    this.maxSpecial = maxSpecial;
   }
 
-  public void setName(String s){
-    this.name = s;
+  public int getPotency() {
+    return potency;
   }
 
-  public void setSpecial(int n) {
-    this.special = n;
-  }
-
-  public abstract String attack(Adventurer other);
-  public abstract String support(Adventurer other);
-  public abstract String support();
-  public abstract String specialAttack(Adventurer other);
-
-  public void applyDamage(int amount){
-    this.HP -= amount;
-  }
-
-  public void status(){
-    System.out.println(this + "'s HP is " + HP + "/" + maxHP + ".");
-    System.out.println(this + "'s " + specialName + " is " + special + "/" + maxSpecial + ".");
+  public void setPotency(int attack) {
+    this.potency = attack;
   }
 }

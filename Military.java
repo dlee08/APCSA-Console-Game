@@ -1,6 +1,6 @@
-public class Scientist extends Adventurer {
-  public Scientist(String name, boolean isPlayer) {
-    super(name, "Ingenuity", isPlayer);
+public class Military extends Adventurer {
+  public Military(String name, boolean isPlayer) {
+    super(name, "Adrenaline", isPlayer);
   }
 
   public String attack(Adventurer other) {
