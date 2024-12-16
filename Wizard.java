@@ -5,7 +5,7 @@ abstract class Wizard extends Adventurer {
 
   public String attack(Adventurer other) {
     other.applyDamage()
-    return this.getClass() + "has attacked 
+    return this.getClass() + " " + this + " has fired a firebolt at " + other + " for"
   }
   public String support(Adventurer other) {
     
