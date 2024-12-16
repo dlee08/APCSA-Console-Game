@@ -43,3 +43,25 @@ Are we going to use the superclass to instantiate objects?
 * In the driver, the player should be declared as Adventurer and instantiated as the subclass (Adventurer player1 = new Warrior("Bob", 10);).
 * Your player has some HP (health points) values at the beginning of the game.
 * Your attack/support/special methods return Strings because you want the option of printing the text of what happened.
+
+
+### Day2
+
+* Look at the sample subclass MyWarrior and compare it to your subclass. What is different? What is the same?
+
+* How your game will interact with the user? 
+
+#### Game requirements:
+
+* Create a class Game.java
+* Create two Adventurer objects player and enemy.
+* Prompt the user: a job/rol.
+* Print the names, HP, and SpecialResource(quantity+name) of both the player and enemy.
+* Prompt the user: "Type: attack / special / support / quit
+* The user can type a/attack to select attack, or type sp/special to do a special attack, or su/support to support themselves. You then make the character use the appropriate action.
+* If the user types quit, end the program.
+* If an invalid response is typed, ask again until the response is valid.
+* Print the results of the action.
+* Now if the opponent is still alive (HP > 0) have the computer randomly choose to have the opponent attack/special attack the player, or buff themselves.
+* Print the results of the action.
+* Repeat this process until one Adventurer is dead (0 or fewer HP), then print the results of the fight. If the user quits, do not print the winner.
