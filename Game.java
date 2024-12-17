@@ -24,7 +24,7 @@ public class Game {
     System.out.println("Please choose how many NPCs you want to have in the game: ");
     int numNPCs = input.nextInt();
 
-    for(int i = 0; i < numNPCs; i++) {
+    for(int i = 1; i <= numNPCs; i++) {
       System.out.println("NPC CREATION #" + i + ": ");
       Random rn = new Random();
       int randomNPC = (int) (rn.nextDouble() * 3) + 1;
