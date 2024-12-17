@@ -1,10 +1,13 @@
 // Collaborators: Jesse Lam, David Lee
+
+import java.util.Scanner;
+
 public abstract class Adventurer extends Active{
   private String name, specialName;
   private int health, maxHealth, special, maxSpecial, potency;
 
   public Adventurer(String name, String specialName, boolean isPlayer) {
-    this(name, specialName, 200, 200, 30, isPlayer);
+    this(name, specialName, 200, 100, 25, isPlayer);
   }
 
   public Adventurer(String name, String specialName, int hp, int special, int potency, boolean isPlayer) {
@@ -24,14 +27,14 @@ public abstract class Adventurer extends Active{
   }
 
   // Offense
-  public abstract String attack(Adventurer other);
+  public abstract void attack(Scanner input);
 
-  public abstract String specialAttack(Adventurer other);
+  public abstract void specialAttack(Scanner input);
 
-  public String damage(Adventurer other, int damage) {
+  public void damage(Adventurer other, int damage) {
     other.applyDamage(damage);
-    String message = this + " has dealt " + damage + " damage to " + other + "! ";
-    return message + "\n" + other.reportHealth();
+    p(this + " has dealt " + damage + " damage to " + other + "! ");
+    other.reportHealth();
   }
 
   public void applyDamage(int amount) {
@@ -45,18 +48,18 @@ public abstract class Adventurer extends Active{
   }
 
   // Support
-  public abstract String support(Adventurer other);
+  public abstract void support(Scanner input);
 
-  public String heal(Adventurer other, int healing) {
+  public void heal(Adventurer other, int healing) {
     healing = other.restoreHP(healing);
-    String message = this + " has restored " + healing + " health to " + other + "! ";
-    return message + "\n" + other.reportHealth();
+    p(this + " has restored " + healing + " health to " + other + "! ");
+    other.reportHealth();
   }
 
-  public String energize(Adventurer other, int energy) {
+  public void energize(Adventurer other, int energy) {
     energy = other.restoreSpecial(energy);
-    String message = this + " has restored " + energy + " " + specialName + " to " + other + "! ";
-    return message + "\n" + other.reportHealth();
+    p(this + " has restored " + energy + " " + specialName + " to " + other + "! ");
+    other.reportSpecial();
   }
 
   public int restoreHP(int n) {
@@ -80,12 +83,12 @@ public abstract class Adventurer extends Active{
   }
 
   // Misc.
-  public String reportHealth() {
-    return this + "'s HP is " + health + "/" + maxHealth + ".";
+  public void reportHealth() {
+    p(this + "'s HP is " + Math.max(0, health) + "/" + maxHealth + ".");
   }
   
-  public String reportSpecial() {
-    return this + "'s " + specialName + " is " + special + "/" + maxSpecial + ". ";
+  public void reportSpecial() {
+    p(this + "'s " + specialName + " is " + special + "/" + maxSpecial + ". ");
   }
 
   public String toString() {
@@ -93,6 +96,12 @@ public abstract class Adventurer extends Active{
       return "\u001b[32m" + getClass().getSimpleName() + " " + this.getName() + "\u001B[0m";
     else
       return "\u001b[31m" + getClass().getSimpleName() + " " + this.getName() + "\u001B[0m";
+  }
+  public void spendSpecial(int cost) {
+    if (getSpecial() - cost < 0) {
+      throw new IllegalArgumentException("Not enough " + getSpecialName() + " to use special.");
+    }
+    setSpecial(getSpecial() - cost);
   }
 
   // Setters and Getters

@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -84,18 +83,18 @@ abstract public class Active {
 
     while (isRoundOngoing()) {
       ArrayList<Adventurer> roundOrder = shuffleRoundOrder();
-      p("The round order has been decided!");
+      p("\nThe round order has been decided!");
       listTargets(roundOrder);
       p("");
 
       for (int turn = 0; turn < roundOrder.size(); turn++) {
         Adventurer activeCharacter = roundOrder.get(turn);
-        p("It is " + activeCharacter + "'s turn!");
+        p("\nIt is " + activeCharacter + "'s turn!");
 
         if (activeCharacter.isPlayer())
           playerChoice(activeCharacter, input);
         else
-          randomEnemyAction(activeCharacter, 0);
+          randomEnemyAction(activeCharacter, 0, input);
 
         if (!isRoundOngoing())
           break;
@@ -103,7 +102,7 @@ abstract public class Active {
     }
   }
 
-  public static void randomEnemyAction(Adventurer activeEnemy, int attempts) {
+  public static void randomEnemyAction(Adventurer activeEnemy, int attempts, Scanner input) {
     if (attempts >= 3) {
       p(activeEnemy + " passes their turn. ");
       return;
@@ -113,16 +112,16 @@ abstract public class Active {
     try {
 
       if (action == 0) {
-        p(activeEnemy.attack(randomPlayer()) + "\n");
+        activeEnemy.attack(input);
       } else if (action == 1) {
-        p(activeEnemy.support(randomEnemy()) + "\n");
+        activeEnemy.support(input);
       } else if (action == 2) {
-        p(activeEnemy.specialAttack(randomPlayer()) + "\n");
+        activeEnemy.specialAttack(input);
       }
 
       // If a condition is not met, keep attempting until forced to pass
     } catch (IllegalArgumentException e) {
-      randomEnemyAction(activeEnemy, attempts + 1);
+      randomEnemyAction(activeEnemy, attempts + 1, input);
     }
   }
 
@@ -144,19 +143,13 @@ abstract public class Active {
 
     try {
       if (choice == 0) {
-        p("Choose your target");
-        listTargets(enemyList());
-        p(activePlayer.attack(enemyList().get(makeChoice(0, enemyList().size() - 1, input))) + "\n");
+        activePlayer.attack(input);
       }
       else if (choice == 1) {
-        p("Choose your target");
-        listTargets(enemyList());
-        p(activePlayer.specialAttack(enemyList().get(makeChoice(0, enemyList().size() - 1, input))) + "\n");
+        activePlayer.specialAttack(input);
       }
       else if (choice == 2) {
-        p("Choose your target");
-        listTargets(playerList());
-        p(activePlayer.support(playerList().get(makeChoice(0, playerList().size() - 1, input))) + "\n");
+        activePlayer.support(input);
       }
       else if (choice == 3)
         return;
@@ -181,6 +174,18 @@ abstract public class Active {
       input.nextLine();
       return makeChoice(lowerBound, upperBound, input);
     }
+  }
+
+  public static Adventurer selectEnemy(Scanner input) {
+    p("Select an enemy.");
+    listTargets(enemyList());
+    return enemyList().get(makeChoice(0, enemyList().size() - 1, input));
+  }
+
+  public static Adventurer selectPlayer(Scanner input) {
+    p("Select a player.");
+    listTargets(playerList());
+    return playerList().get(makeChoice(0, playerList().size() - 1, input));
   }
 
   public static void p(Object o) {

@@ -6,7 +6,7 @@ public class Game {
     Scanner input = new Scanner(System.in);
     // PLAYABLE CHARACTERS
     System.out.println("Please choose how many playable characters you want in the game: ");
-    int numCharacters = input.nextInt();
+    int numCharacters = Active.makeChoice(1, 999, input);
 
     for(int i = 1; i <= numCharacters; i++) {
       System.out.println("CHARACTER CREATION #" + i + ": ");
@@ -22,7 +22,7 @@ public class Game {
 
     // NPCS
     System.out.println("Please choose how many NPCs you want to have in the game: ");
-    int numNPCs = input.nextInt();
+    int numNPCs = Active.makeChoice(1, 999, input);
 
     for(int i = 1; i <= numNPCs; i++) {
       System.out.println("NPC CREATION #" + i + ": ");
@@ -30,17 +30,16 @@ public class Game {
       int randomNPC = (int) (rn.nextDouble() * 3) + 1;
       if(randomNPC == 1) new Wizard("Enemy NPC " + i, false);
       if(randomNPC == 2) new Scientist("Enemy NPC " + i, false);
-      if(randomNPC == 3) new Military("Enemy NPC " + i, false);
+      if(randomNPC == 3) new Soldier("Enemy NPC " + i, false);
     }
 
     Active.beginGame();
   }
 
   public static void createCharacter(Scanner input) throws Exception {
-    System.out.println("Please choose which class of adventurer that you want to play: (1) Wizard (2) Scientist (3) Military");
-    int adventurerType = input.nextInt();
+    System.out.println("Please choose which class of adventurer that you want to play: (1) Wizard (2) Scientist (3) Soldier");
+    int adventurerType = Active.makeChoice(1, 3, input);
     input.nextLine();
-    if(adventurerType < 1 || adventurerType > 3) throw new Exception("Please choose a valid class of adventurer (1-3).");
     System.out.println("Please choose the name of your character: "); 
     String adventurerName = input.nextLine();
     if(adventurerType==1) {
@@ -50,7 +49,7 @@ public class Game {
       new Scientist(adventurerName, true);
     }
     else {
-      new Military(adventurerName, true);
+      new Soldier(adventurerName, true);
     }
   }
 }

@@ -1,27 +1,27 @@
 import java.util.Scanner;
 
-public class Wizard extends Adventurer {
-  public Wizard(String name, boolean isPlayer) {
-    super(name, "Mana", isPlayer);
+public class Soldier extends Adventurer {
+  public Soldier(String name, boolean isPlayer) {
+    super(name, "Adrenaline", isPlayer);
   }
 
   public void attack(Adventurer other) {
     int totalDamage = generateDamage();
-    p(this + " launches a firebolt toward " + other + "! ");
+    p(this + " swings a sword toward " + other + "! "); 
     damage(other, totalDamage);
   }
 
   public void specialAttack(Adventurer other) {
     spendSpecial(50);
     int totalDamage = generateDamage() * 2;
-    p(this + " prepares to immolate " + other + "! ");
+    p(this + " gets ready for a sword blitz " + other + "! ");
     reportSpecial();
     damage(other, totalDamage);
   }
 
   public void support(Adventurer other) {
     int totalHealing = generateSupport();
-    p(this + " channels healing energy toward " + other + "! ");
+    p(this + " patches up the wounds of " + other + "! ");
     heal(other, totalHealing);
   }
 
